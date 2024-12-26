@@ -1,0 +1,214 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.0.1
+      author: Dronov Egor
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    defaultValueComputed: 'uuid_generate_v4()'
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fio
+                  type: varchar(255)
+              - column:
+                  name: birthdate
+                  type: timestamp
+              - column:
+                  name: created
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: wallet
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    defaultValueComputed: 'uuid_generate_v4()'
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_wallet_user
+                    references: user(id)
+                    onDelete: CASCADE
+                    nullable: false
+              - column:
+                  name: wallet_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: balance
+                  type: decimal(15, 2)
+                  defaultValue: 0.00
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_open
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: category
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    defaultValueComputed: 'uuid_generate_v4()'
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_category_user
+                    references: user(id)
+                    onDelete: CASCADE
+                    nullable: false
+              - column:
+                  name: category_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: budget_limit
+                  type: decimal(15, 2)
+        - createTable:
+            tableName: transaction
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    defaultValueComputed: 'uuid_generate_v4()'
+              - column:
+                  name: wallet_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_transaction_wallet
+                    references: wallet(id)
+                    onDelete: CASCADE
+              - column:
+                  name: category_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_transaction_category
+                    references: category(id)
+                    onDelete: SET NULL
+              - column:
+                  name: transaction_type
+                  type: varchar(10)
+                  constraints:
+                    checkConstraint: "transaction_type IN ('income', 'expense')"
+                    nullable: false
+              - column:
+                  name: amount
+                  type: decimal(15, 2)
+                  constraints:
+                    nullable: false
+                    checkConstraint: "amount > 0"
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: transaction_date
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: transfer
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    defaultValueComputed: 'uuid_generate_v4()'
+              - column:
+                  name: sender_wallet_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_transfer_sender_wallet
+                    references: wallet(id)
+                    onDelete: CASCADE
+                    nullable: false
+              - column:
+                  name: receiver_wallet_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_transfer_receiver_wallet
+                    references: wallet(id)
+                    onDelete: CASCADE
+                    nullable: false
+              - column:
+                  name: amount
+                  type: decimal(15, 2)
+                  constraints:
+                    nullable: false
+                    checkConstraint: "amount > 0"
+              - column:
+                  name: transfer_date
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+  - changeSet:
+      id: 1.0.2
+      author: Dronov Egor
+      changes:
+        - createTable:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: user_role
+            baseColumnNames: user_id
+            referencedTableName: user
+            referencedColumnNames: id
+            constraintName: fk_user_role_user
+        - addPrimaryKey:
+            columnNames: user_id, role
+            tableName: user_role
+            constraintName: pk_user_role

@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+spring:
+  devtools:
+    livereload:
+      port: 35729
+  liquibase:
+    change-log: classpath:changelog.yml
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    open-in-view: true
+    properties:
+      hibernate:
+        default_schema: public
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/ecofin
+    username: ecofin
+    password: ecofin
