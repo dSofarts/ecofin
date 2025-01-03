@@ -20,3 +20,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/ecofin
     username: ecofin
     password: ecofin
+
+request-validation:
+  consumers:
+    - service-name: "ecofin-front"
+      always-allowed: true
