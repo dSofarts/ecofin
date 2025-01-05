@@ -1,3 +1,5 @@
-/.idea
+.idea
+target
 ecofin.iml
 ecofin-service.iml
+application-standalone.yml

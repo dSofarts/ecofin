@@ -40,10 +40,14 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
   @Column(nullable = false, unique = true)
-  private String username;
+  private String email;
   @Column(nullable = false)
   private String password;
-  private String fio;
+  @Column(nullable = false)
+  private String firstName;
+  @Column(nullable = false)
+  private String lastName;
+  private String middleName;
   private LocalDateTime birthdate;
   @Column(nullable = false)
   @Builder.Default
@@ -56,10 +60,21 @@ public class User implements UserDetails {
   @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
   @Column(name = "role")
   private Set<String> roles;
+  @Column(nullable = false)
+  @Builder.Default
+  private boolean confirmed = false;
+  private String chatId;
+  private String confirmationCode;
+  private LocalDateTime codeExpirationDate;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return roles.stream().map(SimpleGrantedAuthority::new)
         .collect(Collectors.toSet());
+  }
+
+  @Override
+  public String getUsername() {
+    return this.email;
   }
 }

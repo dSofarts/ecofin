@@ -7,11 +7,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.ecofin.service.dto.request.LoginRequestDto;
 import ru.ecofin.service.dto.request.RefreshTokenRequest;
-import ru.ecofin.service.dto.request.SigninRequestDto;
-import ru.ecofin.service.dto.request.SignupRequestDto;
+import ru.ecofin.service.dto.request.RegistrationRequestDto;
 import ru.ecofin.service.dto.response.JwtResponseDto;
+import ru.ecofin.service.dto.response.UserResponseDto;
 import ru.ecofin.service.entity.User;
+import ru.ecofin.service.exception.NotFoundException;
 import ru.ecofin.service.repository.UserRepository;
 import ru.ecofin.service.security.AuthenticationService;
 import ru.ecofin.service.security.JWTService;
@@ -26,21 +28,26 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private final JWTService jwtService;
 
   @Override
-  public User signup(SignupRequestDto signupRequestDto) {
+  public UserResponseDto registration(RegistrationRequestDto requestDto) {
     User user = User.builder()
-        .username(signupRequestDto.getUsername())
-        .password(passwordEncoder.encode(signupRequestDto.getPassword()))
+        .email(requestDto.getEmail())
+        .password(passwordEncoder.encode(requestDto.getPassword()))
+        .firstName(requestDto.getFirstName())
         .roles(Set.of("USER"))
         .build();
-    return userRepository.save(user);
+    userRepository.save(user);
+    return UserResponseDto.builder()
+        .email(user.getUsername())
+        .id(user.getId().toString())
+        .build();
   }
 
   @Override
-  public JwtResponseDto signin(SigninRequestDto signinRequestDto) {
+  public JwtResponseDto login(LoginRequestDto requestDto) {
     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-        signinRequestDto.getUsername(), signinRequestDto.getPassword()));
-    User user = userRepository.findByUsername(signinRequestDto.getUsername()).orElseThrow(
-        () -> new IllegalArgumentException("Invalid username or password"));
+        requestDto.getEmail(), requestDto.getPassword()));
+    User user = userRepository.findUserByEmail(requestDto.getEmail()).orElseThrow(
+        () -> new NotFoundException(requestDto.getEmail(), "Invalid username or password"));
     String token = jwtService.generateToken(user);
     String refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
     return JwtResponseDto.builder()
@@ -49,14 +56,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   @Override
   public JwtResponseDto refreshToken(RefreshTokenRequest refreshTokenRequest) {
-    String username = jwtService.extractUsername(refreshTokenRequest.getRefreshToken());
-    User user = userRepository.findByUsername(username).orElseThrow(
+    String email = jwtService.extractEmail(refreshTokenRequest.getRefreshToken());
+    User user = userRepository.findUserByEmail(email).orElseThrow(
         () -> new IllegalArgumentException("Invalid token"));
     if (jwtService.isTokenValid(refreshTokenRequest.getRefreshToken(), user)) {
       String token = jwtService.generateToken(user);
       return JwtResponseDto.builder()
           .token(token).refreshToken(refreshTokenRequest.getRefreshToken()).build();
     }
-    return null;
+    throw new NotFoundException(null, "Invalid refresh token");
   }
 }

@@ -10,5 +10,6 @@ public class Constants {
   public static final String ECOFIN_FRONT = "ecofin-front";
   public static final String SUCCESS_STATUS = "success";
   public static final String ERROR_STATUS = "error";
+  public static final String TOPIC = "ecofin-bot-topic";
 
 }

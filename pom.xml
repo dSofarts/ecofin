@@ -10,6 +10,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>ecofin-service</module>
+    <module>ecofin-bot</module>
   </modules>
 
   <properties>
@@ -19,6 +20,7 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <spring-boot.version>3.4.0</spring-boot.version>
+    <kafka.version>3.9.0</kafka.version>
   </properties>
 
   <dependencyManagement>

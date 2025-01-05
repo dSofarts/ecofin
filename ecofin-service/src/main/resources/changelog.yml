@@ -13,8 +13,8 @@ databaseChangeLog:
                     primaryKey: true
                     defaultValueComputed: 'uuid_generate_v4()'
               - column:
-                  name: username
-                  type: varchar(255)
+                  name: phone
+                  type: varchar(11)
                   constraints:
                     unique: true
                     nullable: false
@@ -24,17 +24,42 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: fio
+                  name: last_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: middle_name
                   type: varchar(255)
               - column:
                   name: birthdate
                   type: timestamp
+              - column:
+                  name: confirmed
+                  type: boolean
+                  defaultValue: false
+                  constraints:
+                    nullable: false
               - column:
                   name: created
                   type: timestamp
                   defaultValueComputed: CURRENT_TIMESTAMP
                   constraints:
                     nullable: false
+              - column:
+                  name: chat_id
+                  type: varchar(255)
+              - column:
+                  name: confirmation_code
+                  type: varchar(6)
+              - column:
+                  name: code_expiration_date
+                  type: timestamp
         - createTable:
             tableName: wallet
             columns:

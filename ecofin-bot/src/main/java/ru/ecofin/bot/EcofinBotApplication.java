@@ -1,17 +1,15 @@
-package ru.ecofin.service;
+package ru.ecofin.bot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.kafka.annotation.EnableKafka;
 
 @EnableKafka
 @SpringBootApplication
-@EnableAspectJAutoProxy
 @EnableConfigurationProperties
-public class EcofinServiceApplication {
+public class EcofinBotApplication {
   public static void main(String[] args) {
-    SpringApplication.run(EcofinServiceApplication.class, args);
+    SpringApplication.run(EcofinBotApplication.class, args);
   }
 }

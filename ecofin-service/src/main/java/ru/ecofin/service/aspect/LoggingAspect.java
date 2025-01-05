@@ -17,12 +17,14 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.ecofin.service.annotation.LoggingUsed;
 import ru.ecofin.service.constant.Constants;
+import ru.ecofin.service.exception.BadRequestException;
 import ru.ecofin.service.exception.NotFoundException;
 import ru.ecofin.service.exception.ValidationException;
 import ru.ecofin.service.utils.RestUtils;
@@ -82,8 +84,8 @@ public class LoggingAspect {
     } catch (ValidationException e) {
       log.error("Error: {}", e.getMessage());
       return RestUtils.failReturn(e.getMessage(), e.getStatus());
-    } catch (JsonProcessingException e) {
-      log.error("Error: {}", e.getMessage(), e);
+    } catch (JsonProcessingException | BadRequestException | AuthenticationException e) {
+      log.error("Error: {}", e.getMessage());
       return RestUtils.failReturn(e.getMessage(), HttpStatus.BAD_REQUEST, objectId);
     } catch (NotFoundException e) {
       log.error("Error: {}", e.getMessage());

@@ -20,8 +20,30 @@ spring:
     url: jdbc:postgresql://localhost:5432/ecofin
     username: ecofin
     password: ecofin
+  kafka:
+    bootstrap-servers: localhost:29092,localhost:39092,localhost:49092
+    consumer:
+      group-id: ECOFIN_GROUP_EVENT
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      retries: 3
+      acks: all
 
 request-validation:
   consumers:
     - service-name: "ecofin-front"
       always-allowed: true
+
+topics:
+  confirmation-topic: "ECOFIN_CONFIRMATION_PHONE_TOPIC"
+  send-code-topic: "ECOFIN_SEND_CODE_TOPIC"
+
+logging:
+  level:
+    org:
+      apache:
+        kafka: OFF
+    kafka: OFF
