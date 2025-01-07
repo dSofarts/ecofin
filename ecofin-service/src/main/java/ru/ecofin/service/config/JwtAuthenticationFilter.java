@@ -59,6 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       }
       filterChain.doFilter(request, response);
     } catch (Exception exception) {
+      response.setContentType("application/json");
       response.setStatus(HttpStatus.FORBIDDEN.value());
       response.getWriter().write(objectMapper.writeValueAsString(failReturn(exception.getMessage(),
           HttpStatus.FORBIDDEN).getBody()));

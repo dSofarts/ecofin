@@ -4,7 +4,7 @@ server:
 spring:
   devtools:
     livereload:
-      port: 35729
+      enabled: false
   liquibase:
     change-log: classpath:changelog.yml
   jpa:
@@ -17,11 +17,7 @@ spring:
         default_schema: public
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/ecofin
-    username: ecofin
-    password: ecofin
   kafka:
-    bootstrap-servers: localhost:29092,localhost:39092,localhost:49092
     consumer:
       group-id: ECOFIN_GROUP_EVENT
       auto-offset-reset: earliest

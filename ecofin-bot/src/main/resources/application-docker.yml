@@ -1,0 +1,28 @@
+server:
+  port: 8081
+
+spring:
+  kafka:
+    consumer:
+      group-id: ECOFIN_GROUP_EVENT
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      retries: 3
+      acks: all
+  devtools:
+    livereload:
+      enabled: false
+
+topics:
+  confirmation-topic: "ECOFIN_CONFIRMATION_PHONE_TOPIC"
+  send-code-topic: "ECOFIN_SEND_CODE_TOPIC"
+
+logging:
+  level:
+    org:
+      apache:
+        kafka: OFF
+    kafka: OFF

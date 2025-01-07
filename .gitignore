@@ -3,3 +3,4 @@ target
 ecofin.iml
 ecofin-service.iml
 application-standalone.yml
+environment.env
