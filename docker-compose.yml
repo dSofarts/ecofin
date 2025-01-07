@@ -127,7 +127,6 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/${DATABASE_DB}
       SPRING_DATASOURCE_USERNAME: ${DATABASE_USER}
       SPRING_DATASOURCE_PASSWORD: ${DATABASE_PASSWORD}
-      SPRING_KAFKA_BOOTSTRAP-SERVERS: broker-1:19092,broker-2:19092,broker-3:19092
     ports:
       - '8080:8080'
     depends_on:
@@ -145,7 +144,6 @@ services:
         JAR_FILE: ecofin-bot/target/ecofin-bot-1.0.0-exec.jar
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_KAFKA_BOOTSTRAP-SERVERS: broker-1:19092,broker-2:19092,broker-3:19092
       BOT_NAME: ${BOT_NAME}
       BOT_TOKEN: ${BOT_TOKEN}
     ports:

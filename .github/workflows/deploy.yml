@@ -1,0 +1,67 @@
+name: Deploy release to server
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  Validate-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if tag matches pattern
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG_NAME="${GITHUB_REF##*/}"
+          if [[ ! $TAG_NAME =~ ^v[0-9]+\.[0-9]{2}\.[0-9]{2}$ ]]; then
+            echo "Tag $TAG_NAME does not match the pattern vX.XX.XX"
+            exit 1
+          fi
+          echo "Tag $TAG_NAME matches the pattern"
+  Test:
+    needs: Validate-version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Set up Java and Maven
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Run tests
+        run: mvn test
+  Prepare-environment:
+    needs: Test
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Stop and remove containers, networks
+        run: docker compose down
+      - name: Remove unused data
+        run: docker system prune -a -f
+  Deploy:
+    needs: Prepare-environment
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Make environment file
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_PROFILE: docker
+          envkey_DATABASE_DB: ${{ secrets.DATABASE_DB }}
+          envkey_DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          envkey_DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          envkey_BOT_NAME: ${{ secrets.BOT_NAME }}
+          envkey_BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          file_name: environment.env
+          fail_on_empty: false
+      - name: Package with Maven
+        run: mvn clean package -Dmaven.test.skip
+      - name: Docker compose
+        run: docker compose --env-file ./environment.env up -d --build
+      - name: Removing all unused volumes
+        run: docker volume prune -af
