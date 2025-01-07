@@ -3,9 +3,9 @@ services:
     container_name: database
     image: postgres:17
     environment:
-      POSTGRES_DB: ecofin
-      POSTGRES_USER: ecofin
-      POSTGRES_PASSWORD: ecofin
+      POSTGRES_DB: ${DATABASE_DB}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
