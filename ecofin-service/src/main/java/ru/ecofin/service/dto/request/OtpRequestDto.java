@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RefreshTokenRequest {
+public class OtpRequestDto {
 
-  private String refreshToken;
+  private String tempToken;
+  private String operationId;
+  private String otp;
 }

@@ -7,5 +7,5 @@ import ru.ecofin.service.entity.User;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-  Optional<User> findUserByEmail(String email);
+  Optional<User> findUserByPhone(String phone);
 }

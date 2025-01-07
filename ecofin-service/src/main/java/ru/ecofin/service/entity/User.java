@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -40,7 +41,7 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
   @Column(nullable = false, unique = true)
-  private String email;
+  private String phone;
   @Column(nullable = false)
   private String password;
   @Column(nullable = false)
@@ -48,7 +49,7 @@ public class User implements UserDetails {
   @Column(nullable = false)
   private String lastName;
   private String middleName;
-  private LocalDateTime birthdate;
+  private LocalDate birthdate;
   @Column(nullable = false)
   @Builder.Default
   private LocalDateTime created = LocalDateTime.now();
@@ -64,8 +65,6 @@ public class User implements UserDetails {
   @Builder.Default
   private boolean confirmed = false;
   private String chatId;
-  private String confirmationCode;
-  private LocalDateTime codeExpirationDate;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -75,6 +74,6 @@ public class User implements UserDetails {
 
   @Override
   public String getUsername() {
-    return this.email;
+    return this.phone;
   }
 }

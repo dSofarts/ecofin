@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -22,7 +21,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Wallet {
+public class Otp {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -31,17 +30,11 @@ public class Wallet {
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
   @Column(nullable = false)
-  @Builder.Default
-  private String walletName = "Мой кошелек";
+  private String otpCode;
   @Column(nullable = false)
   @Builder.Default
-  private BigDecimal balance = BigDecimal.ZERO;
+  private LocalDateTime expiration = LocalDateTime.now().plusMinutes(5);
   @Column(nullable = false)
   @Builder.Default
-  private LocalDateTime created = LocalDateTime.now();
-  @Column(nullable = false)
-  @Builder.Default
-  private boolean isOpen = true;
-  @Column(nullable = false)
-  private boolean isPrimary;
+  private boolean used = false;
 }

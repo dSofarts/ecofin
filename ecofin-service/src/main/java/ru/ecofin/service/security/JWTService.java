@@ -1,17 +1,23 @@
 package ru.ecofin.service.security;
 
-import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.ecofin.service.entity.User;
 
 public interface JWTService {
 
-  String extractEmail(String token);
+  String extractPhone(String token);
 
   String generateToken(UserDetails user);
 
-  String generateRefreshToken(Map<String, Object> extraClaims, UserDetails user);
+  String generateRefreshToken(UserDetails user);
 
   boolean isTokenValid(String token, UserDetails userDetails);
 
-  boolean tokenIsNotRefresh(String jwt, UserDetails userDetails);
+  boolean tokenIsReal(String jwt);
+
+  boolean tokenIsRefresh(String jwt);
+
+  boolean tokenIsTemp(String jwt);
+
+  String generateTempToken(User user);
 }

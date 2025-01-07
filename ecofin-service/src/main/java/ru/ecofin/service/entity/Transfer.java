@@ -36,6 +36,7 @@ public class Transfer {
   @Column(nullable = false, precision = 15, scale = 2)
   private BigDecimal amount;
   @Column(nullable = false)
+  @Builder.Default
   private LocalDateTime transferDate = LocalDateTime.now();
   private String description;
 }

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RefreshTokenRequest {
+public class MainRequestDto {
 
-  private String refreshToken;
+  private String userId;
 }

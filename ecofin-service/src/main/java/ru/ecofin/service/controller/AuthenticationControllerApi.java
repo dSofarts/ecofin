@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.ecofin.service.dto.request.LoginRequestDto;
+import ru.ecofin.service.dto.request.OtpRequestDto;
 import ru.ecofin.service.dto.request.RefreshTokenRequest;
 import ru.ecofin.service.dto.request.RegistrationRequestDto;
 import ru.ecofin.service.dto.response.FrontResponseDto;
 import ru.ecofin.service.dto.response.JwtResponseDto;
+import ru.ecofin.service.dto.response.LoginResponseDto;
 import ru.ecofin.service.dto.response.UserResponseDto;
 
 @Tag(name = "API для аутентификации пользователя")
@@ -70,7 +72,7 @@ public interface AuthenticationControllerApi {
   @ApiResponses(value = {
       @ApiResponse(
           responseCode = "200",
-          content = @Content(schema = @Schema(implementation = JwtResponseDto.class)),
+          content = @Content(schema = @Schema(implementation = LoginResponseDto.class)),
           description = "Пользователь успешно авторизирован"),
       @ApiResponse(
           responseCode = "400",
@@ -98,9 +100,47 @@ public interface AuthenticationControllerApi {
           in = ParameterIn.HEADER,
           schema = @Schema(format = "String"))
   })
-  ResponseEntity<JwtResponseDto> login(
+  ResponseEntity<LoginResponseDto> login(
       @RequestHeader Map<String, String> requestHeader,
       @RequestBody LoginRequestDto requestBody);
+
+  @PostMapping("/authenticate")
+  @Operation(summary = "Запрос на авторизацию пользователя",
+      description = "Запрос на авторизацию пользователя")
+  @ApiResponses(value = {
+      @ApiResponse(
+          responseCode = "200",
+          content = @Content(schema = @Schema(implementation = JwtResponseDto.class)),
+          description = "Пользователь успешно аутентифицирован"),
+      @ApiResponse(
+          responseCode = "400",
+          content = @Content(schema = @Schema(implementation = FrontResponseDto.class)),
+          description = "Ошибка во входящих данных, либо пользователь не найден"),
+      @ApiResponse(
+          responseCode = "401",
+          content = @Content(schema = @Schema(implementation = FrontResponseDto.class)),
+          description = "Доступ к ресурсу запрещен без авторизации"),
+      @ApiResponse(
+          responseCode = "403",
+          content = @Content(schema = @Schema(implementation = FrontResponseDto.class)),
+          description = "Доступ к ресурсу запрещен"),
+      @ApiResponse(
+          responseCode = "500",
+          content = @Content(schema = @Schema(implementation = FrontResponseDto.class)),
+          description = "Ошибка сервера"),
+  })
+  @Parameters({
+      @Parameter(
+          name = "service-name",
+          description = "Название потребителя",
+          example = "service",
+          required = true,
+          in = ParameterIn.HEADER,
+          schema = @Schema(format = "String"))
+  })
+  ResponseEntity<JwtResponseDto> authenticate(
+      @RequestHeader Map<String, String> requestHeader,
+      @RequestBody OtpRequestDto requestBody);
 
   @PostMapping("/refresh-token")
   @Operation(summary = "Запрос на обновление токена",

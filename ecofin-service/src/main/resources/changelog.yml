@@ -38,7 +38,7 @@ databaseChangeLog:
                   type: varchar(255)
               - column:
                   name: birthdate
-                  type: timestamp
+                  type: date
               - column:
                   name: confirmed
                   type: boolean
@@ -54,12 +54,6 @@ databaseChangeLog:
               - column:
                   name: chat_id
                   type: varchar(255)
-              - column:
-                  name: confirmation_code
-                  type: varchar(6)
-              - column:
-                  name: code_expiration_date
-                  type: timestamp
         - createTable:
             tableName: wallet
             columns:
@@ -98,6 +92,11 @@ databaseChangeLog:
                   name: is_open
                   type: boolean
                   defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_primary
+                  type: boolean
                   constraints:
                     nullable: false
         - createTable:
@@ -237,3 +236,40 @@ databaseChangeLog:
             columnNames: user_id, role
             tableName: user_role
             constraintName: pk_user_role
+  - changeSet:
+      id: 1.0.3
+      author: Dronov Egor
+      changes:
+        - createTable:
+            tableName: otp
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    defaultValueComputed: 'uuid_generate_v4()'
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_otp_user
+                    references: user(id)
+                    onDelete: CASCADE
+                    nullable: false
+              - column:
+                  name: otp_code
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiration
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: used
+                  type: boolean
+                  defaultValue: false
+                  constraints:
+                    nullable: false
