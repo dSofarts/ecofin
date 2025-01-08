@@ -57,6 +57,7 @@ jobs:
           envkey_DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
           envkey_BOT_NAME: ${{ secrets.BOT_NAME }}
           envkey_BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          envkey_ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
           file_name: environment.env
           fail_on_empty: false
       - name: Package with Maven

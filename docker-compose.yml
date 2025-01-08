@@ -127,6 +127,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/${DATABASE_DB}
       SPRING_DATASOURCE_USERNAME: ${DATABASE_USER}
       SPRING_DATASOURCE_PASSWORD: ${DATABASE_PASSWORD}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
     ports:
       - '8080:8080'
     depends_on:

@@ -7,6 +7,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.ecofin.service.dto.kafka.CodeDto;
 import ru.ecofin.service.entity.Otp;
@@ -23,6 +24,8 @@ public class OtpServiceImpl implements OtpService {
 
   private final OtpRepository otpRepository;
   private final KafkaProducer kafkaProducer;
+  @Value("${encryption.key}")
+  private String secretKey;
 
   @Override
   @SneakyThrows
@@ -31,7 +34,7 @@ public class OtpServiceImpl implements OtpService {
     LocalDateTime expirationDate = LocalDateTime.now().plusMinutes(5);
     Otp otpEntity = Otp.builder()
         .user(user)
-        .otpCode(EncryptionUtils.encrypt(otp))
+        .otpCode(EncryptionUtils.encrypt(otp, secretKey))
         .expiration(expirationDate)
         .build();
     otpRepository.save(otpEntity);
@@ -52,7 +55,7 @@ public class OtpServiceImpl implements OtpService {
     if (optionalOtp.isPresent()) {
       Otp otpEntity = optionalOtp.get();
       if (otpEntity.getExpiration().isAfter(LocalDateTime.now())
-          && otp.equals(EncryptionUtils.decrypt(otpEntity.getOtpCode()))
+          && otp.equals(EncryptionUtils.decrypt(otpEntity.getOtpCode(), secretKey))
           && !otpEntity.isUsed()) {
         otpEntity.setUsed(true);
         return true;

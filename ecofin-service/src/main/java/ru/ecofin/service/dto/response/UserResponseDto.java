@@ -1,5 +1,6 @@
 package ru.ecofin.service.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -37,6 +38,7 @@ public class UserResponseDto {
     @Schema(description = "Отчество пользователя (при наличии)")
     private String middleName;
     @Schema(description = "Дата рождения пользователя")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
   }
 }
