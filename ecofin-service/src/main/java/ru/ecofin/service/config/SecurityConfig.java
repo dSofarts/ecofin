@@ -70,7 +70,7 @@ public class SecurityConfig {
 
   private static CorsConfiguration getCorsConfiguration() {
     CorsConfiguration corsConfiguration = new CorsConfiguration();
-    corsConfiguration.setAllowedOrigins(List.of("*"));
+    corsConfiguration.setAllowedOriginPatterns(List.of("*"));
     corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
     corsConfiguration.setAllowedHeaders(List.of("*"));
     corsConfiguration.setAllowCredentials(true);
