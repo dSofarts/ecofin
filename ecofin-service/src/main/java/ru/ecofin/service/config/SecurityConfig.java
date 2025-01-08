@@ -1,6 +1,7 @@
 package ru.ecofin.service.config;
 
 import java.util.Arrays;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -69,13 +70,9 @@ public class SecurityConfig {
 
   private static CorsConfiguration getCorsConfiguration() {
     CorsConfiguration corsConfiguration = new CorsConfiguration();
-    corsConfiguration.setAllowedOrigins(
-        Arrays.asList("http://localhost:4200", "https://localhost:4200",
-            "http://77.91.65.153", "https://77.91.65.153", "http://77.91.65.153:4200",
-            "https://77.91.65.153:4200"));
+    corsConfiguration.setAllowedOrigins(List.of("*"));
     corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
-    corsConfiguration.setAllowedHeaders(
-        Arrays.asList("Authorization", "Cache-Control", "Content-Type", "Service-Name"));
+    corsConfiguration.setAllowedHeaders(List.of("*"));
     corsConfiguration.setAllowCredentials(true);
     return corsConfiguration;
   }
