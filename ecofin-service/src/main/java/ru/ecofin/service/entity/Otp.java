@@ -7,7 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,8 +32,7 @@ public class Otp {
   @Column(nullable = false)
   private String otpCode;
   @Column(nullable = false)
-  @Builder.Default
-  private LocalDateTime expiration = LocalDateTime.now().plusMinutes(5);
+  private ZonedDateTime expiration;
   @Column(nullable = false)
   @Builder.Default
   private boolean used = false;

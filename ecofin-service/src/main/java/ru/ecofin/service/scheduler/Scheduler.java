@@ -1,7 +1,7 @@
 package ru.ecofin.service.scheduler;
 
 import jakarta.transaction.Transactional;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,6 +16,6 @@ public class Scheduler {
   @Transactional
   @Scheduled(fixedRate = 3600000) // Запуск раз в час
   public void cleanupExpiredOtps() {
-    otpRepository.deleteAllByExpirationBefore(LocalDateTime.now());
+    otpRepository.deleteAllByExpirationBefore(ZonedDateTime.now());
   }
 }

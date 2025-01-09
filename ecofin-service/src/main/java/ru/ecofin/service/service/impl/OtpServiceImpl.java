@@ -1,7 +1,7 @@
 package ru.ecofin.service.service.impl;
 
 import jakarta.transaction.Transactional;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class OtpServiceImpl implements OtpService {
   @SneakyThrows
   public Otp generateOtp(User user) {
     String otp = String.valueOf((int) (Math.random() * 900000) + 100000);
-    LocalDateTime expirationDate = LocalDateTime.now().plusMinutes(5);
+    ZonedDateTime expirationDate = ZonedDateTime.now().plusMinutes(5);
     Otp otpEntity = Otp.builder()
         .user(user)
         .otpCode(EncryptionUtils.encrypt(otp, secretKey))
@@ -42,7 +42,6 @@ public class OtpServiceImpl implements OtpService {
     kafkaProducer.send(CodeDto.builder()
         .operationId(otpEntity.getId().toString())
         .code(otp)
-        .expirationDate(expirationDate)
         .chatId(user.getChatId()).build());
     return otpEntity;
   }
@@ -54,7 +53,7 @@ public class OtpServiceImpl implements OtpService {
     Optional<Otp> optionalOtp = otpRepository.findOtpById(UUID.fromString(operationId));
     if (optionalOtp.isPresent()) {
       Otp otpEntity = optionalOtp.get();
-      if (otpEntity.getExpiration().isAfter(LocalDateTime.now())
+      if (otpEntity.getExpiration().isAfter(ZonedDateTime.now())
           && otp.equals(EncryptionUtils.decrypt(otpEntity.getOtpCode(), secretKey))
           && !otpEntity.isUsed()) {
         otpEntity.setUsed(true);
