@@ -42,8 +42,8 @@ logging:
   level:
     org:
       apache:
-        kafka: OFF
-    kafka: OFF
+        kafka: WARN
+    kafka: WARN
 
 springdoc:
   api-docs:
