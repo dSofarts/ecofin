@@ -16,7 +16,7 @@ public class MainRequestValidator implements Validator {
   public void validate(Object target, Errors errors) {
     MainRequestDto request = (MainRequestDto) target;
     ValidationUtils.rejectIfEmpty(errors, "userId", "userId");
-    if (request.getUserId() != null || request.getUserId().length() != 36) {
+    if (request.getUserId() != null && request.getUserId().length() != 36) {
       errors.reject("userId", "userId");
     }
   }
