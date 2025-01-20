@@ -19,4 +19,7 @@ Swagger сервиса: http://77.91.65.153:8080/swagger-ui
 
 Хост для запросов: http://77.91.65.153:8080
 
-Телеграм бот для подтверждения аккаунта: https://t.me/EcofinConfirmationBot
+Телеграм бот для подтверждения аккаунта: https://t.me/EcofinConfirmationBot 
+(после регистрации необходимо обязательно подтвердить аккаунт)
+
+Коллекция основных запросов в Postman: https://www.postman.com/dsofarts/workspace/ecofin (выберите environment: base)
