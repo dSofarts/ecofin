@@ -10,6 +10,7 @@ public class Constants {
   public static final String ECOFIN_FRONT = "ecofin-front";
   public static final String SUCCESS_STATUS = "success";
   public static final String ERROR_STATUS = "error";
-  public static final String TOPIC = "ecofin-bot-topic";
+  public static final String AUTHORIZATION_HEADER = "authorization";
+  public static final String FULL_NAME_TEMPLATE = "%s%s %s.";
 
 }

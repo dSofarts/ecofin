@@ -1,0 +1,77 @@
+<div id="login-block">
+  <h1 class="h1 mb2">Вход</h1>
+  <div *ngIf="!this.authService.isLoggedIn && !this.authService.accountNotConfirmed">
+    <form [formGroup]="loginForm" (ngSubmit)="sendCode($event)">
+      <input type="text" placeholder="Телефон" formControlName="phone" class="input input-login">
+      <input type="password" placeholder="Пароль" formControlName="password" class="input input-login">
+      <button type="submit" class="btn">Войти</button>
+      <button class="btn-link ml1" type="button">Забыли пароль?</button>
+    </form>
+  </div>
+  <div *ngIf="this.authService.accountNotConfirmed">
+    Подтвердите аккаунт
+    <img ngSrc="/assets/images/qr-bot.svg" alt="qr" height="250" width="250">
+  </div>
+  <div *ngIf="this.authService.isLoggedIn && !this.authService.accountNotConfirmed">
+    <div class="input-block mt2">
+      <input
+        type="text"
+        maxlength="1"
+        #input1
+        (input)="onInput($event, input2)"
+        (keydown)="onBackspace($event, null)"
+        (paste)="onPaste($event)"
+        class="input-code"
+      />
+      <input
+        type="text"
+        maxlength="1"
+        #input2
+        (input)="onInput($event, input3)"
+        (keydown)="onBackspace($event, input1)"
+        (paste)="onPaste($event)"
+        class="input-code"
+      />
+      <input
+        type="text"
+        maxlength="1"
+        #input3
+        (input)="onInput($event, input4)"
+        (keydown)="onBackspace($event, input2)"
+        (paste)="onPaste($event)"
+        class="input-code"
+      />
+      <input
+        type="text"
+        maxlength="1"
+        #input4
+        (input)="onInput($event, input5)"
+        (keydown)="onBackspace($event, input3)"
+        (paste)="onPaste($event)"
+        class="input-code"
+      />
+      <input
+        type="text"
+        maxlength="1"
+        #input5
+        (input)="onInput($event, input6)"
+        (keydown)="onBackspace($event, input4)"
+        (paste)="onPaste($event)"
+        class="input-code"
+      />
+      <input
+        type="text"
+        maxlength="1"
+        #input6
+        (input)="onInput($event, null)"
+        (keydown)="onBackspace($event, input5)"
+        (paste)="onPaste($event)"
+        class="input-code"
+      />
+    </div>
+    <button type="button" class="btn mt2" (click)="login($event)">Войти</button>
+    <button (click)="sendCode($event)" [disabled]="!this.canTryAgain()" type="button" class="btn-link ml1">
+      Отправить повторно {{ countdown }}
+    </button>
+  </div>
+</div>

@@ -44,4 +44,15 @@ public class RestUtils {
         String.format("Not permission for this service-name: %s to execute request",
             serviceName), HttpStatus.FORBIDDEN);
   }
+
+  public static FrontResponseDto buildResponseDto(String message, String statusCode) {
+    return buildResponseDto(null, message, statusCode);
+  }
+
+  public static FrontResponseDto buildResponseDto(String entityId, String message, String statusCode) {
+    return FrontResponseDto.builder()
+        .statusCode(statusCode)
+        .status(statusCode)
+        .objectId(entityId).build();
+  }
 }

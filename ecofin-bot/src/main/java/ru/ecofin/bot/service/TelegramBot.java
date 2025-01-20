@@ -17,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.ecofin.bot.dto.ConfirmationDto;
+import ru.ecofin.bot.dto.TransferMessageDto;
 import ru.ecofin.bot.kafka.KafkaProducer;
 
 @Slf4j
@@ -109,6 +110,14 @@ public class TelegramBot extends TelegramLongPollingBot {
         + "Не сообщайте данный код никому, его спрашивают только мошенники")
         .formatted(code));
     message.setParseMode("MarkdownV2");
+    sendMessage(message);
+  }
+
+  public void sendTransferMessages(TransferMessageDto transferMessageDto) {
+    SendMessage message = new SendMessage();
+    message.setChatId(transferMessageDto.getReceiverChatId());
+    message.setText("Поступление %s RUB от %s".formatted(transferMessageDto.getAmount(),
+        transferMessageDto.getSenderFullName()));
     sendMessage(message);
   }
 

@@ -13,7 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +52,7 @@ public class User implements UserDetails {
   private LocalDate birthdate;
   @Column(nullable = false)
   @Builder.Default
-  private LocalDateTime created = LocalDateTime.now();
+  private ZonedDateTime created = ZonedDateTime.now();
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Wallet> wallets;
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

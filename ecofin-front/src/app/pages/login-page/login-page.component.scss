@@ -1,0 +1,26 @@
+@import "vars";
+
+#login-block {
+  width: 400px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.input-block {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.input-code {
+  font-size: 1.7rem;
+  padding: 10px 20px;
+  min-width: 3rem;
+  border: 1px solid $dark-grey-color;
+  border-radius: 4px;
+}
+
+.input-login {
+  font-size: 1rem;
+}

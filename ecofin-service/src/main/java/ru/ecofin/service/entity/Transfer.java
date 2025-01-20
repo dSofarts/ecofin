@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +37,6 @@ public class Transfer {
   private BigDecimal amount;
   @Column(nullable = false)
   @Builder.Default
-  private LocalDateTime transferDate = LocalDateTime.now();
+  private ZonedDateTime transferDate = ZonedDateTime.now();
   private String description;
 }

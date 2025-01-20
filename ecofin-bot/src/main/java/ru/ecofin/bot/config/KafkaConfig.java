@@ -14,6 +14,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import ru.ecofin.bot.dto.CodeDto;
+import ru.ecofin.bot.dto.TransferMessageDto;
 
 @Configuration
 @RequiredArgsConstructor
@@ -46,6 +47,24 @@ public class KafkaConfig {
   public ConcurrentKafkaListenerContainerFactory<String, CodeDto> codeDtoFactory(
       ConsumerFactory<String, CodeDto> consumerFactory) {
     ConcurrentKafkaListenerContainerFactory<String, CodeDto> factory =
+        new ConcurrentKafkaListenerContainerFactory<>();
+    factory.setConsumerFactory(consumerFactory);
+    return factory;
+  }
+
+  @Bean
+  public ConsumerFactory<String, TransferMessageDto> consumerFactoryTransferMessageDto() {
+    Map<String, Object> props = kafkaProperties.buildConsumerProperties(null);
+    return new DefaultKafkaConsumerFactory<>(
+        props,
+        new StringDeserializer(),
+        new JsonDeserializer<>(TransferMessageDto.class));
+  }
+
+  @Bean
+  public ConcurrentKafkaListenerContainerFactory<String, TransferMessageDto> transferMessageDtoFactory(
+      ConsumerFactory<String, TransferMessageDto> consumerFactory) {
+    ConcurrentKafkaListenerContainerFactory<String, TransferMessageDto> factory =
         new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(consumerFactory);
     return factory;

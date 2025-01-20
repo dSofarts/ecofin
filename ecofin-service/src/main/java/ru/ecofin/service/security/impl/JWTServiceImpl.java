@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.function.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import ru.ecofin.service.constant.Constants;
 import ru.ecofin.service.entity.User;
 import ru.ecofin.service.security.JWTService;
 
@@ -56,6 +57,12 @@ public class JWTServiceImpl implements JWTService {
         .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TEMP_TIME))
         .signWith(getSignKey(), SignatureAlgorithm.HS256)
         .compact();
+  }
+
+  @Override
+  public String getPhoneFromHeader(Map<String, String> requestHeader) {
+    return extractPhone(requestHeader.get(Constants.AUTHORIZATION_HEADER)
+        .substring(7));
   }
 
   @Override

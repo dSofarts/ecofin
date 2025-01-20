@@ -1,7 +1,5 @@
 package ru.ecofin.service.aspect;
 
-import static ru.ecofin.service.utils.ObjectMapperUtils.convertObjectToString;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -30,6 +28,7 @@ import ru.ecofin.service.exception.NotFoundException;
 import ru.ecofin.service.exception.ValidationException;
 import ru.ecofin.service.utils.RestUtils;
 import ru.ecofin.service.utils.ValidationUtils;
+import ru.ecofin.utils.masking.service.MaskingService;
 
 @Slf4j
 @Aspect
@@ -37,6 +36,7 @@ import ru.ecofin.service.utils.ValidationUtils;
 @RequiredArgsConstructor
 public class LoggingAspect {
 
+  private final MaskingService maskingService;
   private static final String REQUEST_HEADER_EXCEPTION = "Not found required header in request";
 
   @SneakyThrows
@@ -71,11 +71,12 @@ public class LoggingAspect {
       }
     }
 
+    String endpoint = objectId == null ? loggingUsed.endpoint() : loggingUsed.endpoint()
+        .replace("{}", objectId);
     log.info("endpoint: {}, operationId: {}, objectId: {}, service-name: {}, requestBody: {},"
             + " requestParams: {}",
-        loggingUsed.endpoint(), operationId, objectId,
-        requestHeaders.get(Constants.SERVICE_NAME),
-        convertObjectToString(requestBody), requestParams);
+        endpoint, operationId, objectId, requestHeaders.get(Constants.SERVICE_NAME),
+        maskingService.writeAsString(requestBody), requestParams);
 
     ResponseEntity<?> response;
     try {
@@ -96,7 +97,7 @@ public class LoggingAspect {
     }
 
     Object responseBody = response.getBody();
-    log.info("Response data: {}", convertObjectToString(responseBody));
+    log.info("Response data: {}", maskingService.writeAsString(responseBody));
     log.debug("Finish logging process via aspect: {}", operationId);
     return response;
   }

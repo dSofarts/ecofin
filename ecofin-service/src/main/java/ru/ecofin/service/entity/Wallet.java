@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,7 +38,7 @@ public class Wallet {
   private BigDecimal balance = BigDecimal.ZERO;
   @Column(nullable = false)
   @Builder.Default
-  private LocalDateTime created = LocalDateTime.now();
+  private ZonedDateTime created = ZonedDateTime.now();
   @Column(nullable = false)
   @Builder.Default
   private boolean isOpen = true;

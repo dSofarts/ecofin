@@ -11,6 +11,7 @@
   <modules>
     <module>ecofin-service</module>
     <module>ecofin-bot</module>
+    <module>masking</module>
   </modules>
 
   <properties>

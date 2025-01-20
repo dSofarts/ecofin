@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.ecofin.service.constant.Constants;
 import ru.ecofin.service.security.JWTService;
 import ru.ecofin.service.service.UserService;
 
@@ -32,11 +33,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-    final String authHeader = request.getHeader("Authorization");
+    final String authHeader = request.getHeader(Constants.AUTHORIZATION_HEADER);
     final String jwt;
     final String phone;
 
-    if (StringUtils.isEmpty(authHeader) || !authHeader.startsWith("Bearer ")) {
+    if (StringUtils.isEmpty(authHeader) || !authHeader.startsWith("Bearer ") ||
+        request.getRequestURI().contains("refresh-token")) {
       filterChain.doFilter(request, response);
       return;
     }

@@ -1,4 +1,4 @@
-package ru.ecofin.service.controller;
+package ru.ecofin.service.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,7 @@ import ru.ecofin.service.dto.response.LoginResponseDto;
 import ru.ecofin.service.dto.response.UserResponseDto;
 
 @Tag(name = "API для аутентификации пользователя")
-@RequestMapping("/api/v1/auth")
+@RequestMapping(value = "auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public interface AuthenticationControllerApi {
 
   @PostMapping("/registration")

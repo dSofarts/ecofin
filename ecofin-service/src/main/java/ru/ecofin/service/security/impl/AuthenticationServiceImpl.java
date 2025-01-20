@@ -60,7 +60,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
       throw new ValidationException("Invalid username or password", HttpStatus.UNAUTHORIZED);
     }
     if (!user.isConfirmed()) {
-      throw new ValidationException("Used is not confirmed", HttpStatus.BAD_REQUEST);
+      throw new ValidationException("Used is not confirmed", HttpStatus.FORBIDDEN);
     }
     String tempToken = jwtService.generateTempToken(user);
     Otp otp = otpService.generateOtp(user);

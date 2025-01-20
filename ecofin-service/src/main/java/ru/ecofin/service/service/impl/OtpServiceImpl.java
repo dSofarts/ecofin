@@ -39,7 +39,7 @@ public class OtpServiceImpl implements OtpService {
         .build();
     otpRepository.save(otpEntity);
 
-    kafkaProducer.send(CodeDto.builder()
+    kafkaProducer.sendCode(CodeDto.builder()
         .operationId(otpEntity.getId().toString())
         .code(otp)
         .chatId(user.getChatId()).build());

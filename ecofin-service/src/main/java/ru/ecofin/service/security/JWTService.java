@@ -1,5 +1,6 @@
 package ru.ecofin.service.security;
 
+import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.ecofin.service.entity.User;
 
@@ -20,4 +21,6 @@ public interface JWTService {
   boolean tokenIsTemp(String jwt);
 
   String generateTempToken(User user);
+
+  String getPhoneFromHeader(Map<String, String> requestHeader);
 }

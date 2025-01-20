@@ -1,0 +1,73 @@
+@import "vars";
+@import "margins";
+
+*, *:before, *:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+body {
+  font-family: $font;
+  color: $black-color;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all .3s ease-in-out;
+  &:hover {
+    color: $primary-hover-color;
+    text-decoration: underline;
+  }
+}
+
+.btn {
+  background-color: $black-color;
+  color: $white-color;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: all .3s ease-in-out;
+  &:hover {
+    background-color: $black-color;
+    opacity: .8;
+  }
+}
+
+.btn-link {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: $primary-color;
+  font-weight: 500;
+  cursor: pointer;
+  &:hover {
+    color: $primary-hover-color;
+    text-decoration: underline;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    color: $dark-grey-color;
+    &:hover {
+      color: $dark-grey-color;
+      text-decoration: none;
+    }
+  }
+}
+
+.input {
+  width: 100%;
+  background-color: $white-color;
+  border: 1px solid $grey-color;
+  border-radius: 4px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+}
