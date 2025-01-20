@@ -122,13 +122,11 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   private BigDecimal findAmountForCategoryInThisMount(Category cat) {
-    BigDecimal amount = BigDecimal.ZERO;
-    transactionRepository.getTransactionsByCategory(cat).stream()
+    return transactionRepository.getTransactionsByCategory(cat).stream()
         .filter(transaction -> transaction
             .getTransactionDate().getMonth().equals(ZonedDateTime.now().getMonth()))
         .map(Transaction::getAmount)
-        .forEach(amount::add);
-    return amount;
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
   @Override
@@ -157,9 +155,9 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   private BigDecimal getSumFromTransactionList(List<Transaction> transactionList) {
-    BigDecimal sum = BigDecimal.ZERO;
-    transactionList.stream().map(Transaction::getAmount).forEach(sum::add);
-    return sum;
+    return transactionList.stream()
+        .map(Transaction::getAmount)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
   @Override
