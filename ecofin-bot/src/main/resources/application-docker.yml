@@ -20,6 +20,7 @@ spring:
 topics:
   confirmation-topic: "ECOFIN_CONFIRMATION_PHONE_TOPIC"
   send-code-topic: "ECOFIN_SEND_CODE_TOPIC"
+  send-transfer-message-topic: "ECOFIN_SEND_TRANSFER_MESSAGE"
 
 logging:
   level:
