@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ecofin.service.annotation.LoggingUsed;
 import ru.ecofin.service.controller.api.AuthenticationControllerApi;
+import ru.ecofin.service.controller.validator.LoginRequestValidator;
+import ru.ecofin.service.controller.validator.MainValidator;
+import ru.ecofin.service.controller.validator.OtpRequestValidator;
+import ru.ecofin.service.controller.validator.RefreshTokenRequestValidator;
+import ru.ecofin.service.controller.validator.RegistrationRequestValidator;
 import ru.ecofin.service.dto.request.LoginRequestDto;
 import ru.ecofin.service.dto.request.OtpRequestDto;
 import ru.ecofin.service.dto.request.RefreshTokenRequest;
@@ -27,6 +32,7 @@ import ru.ecofin.service.security.AuthenticationService;
 public class AuthenticationController implements AuthenticationControllerApi {
 
   private final AuthenticationService authenticationService;
+  private final MainValidator mainValidator;
 
   @Override
   @SneakyThrows
@@ -34,6 +40,7 @@ public class AuthenticationController implements AuthenticationControllerApi {
   public ResponseEntity<UserResponseDto> registration(
       @RequestHeader Map<String, String> requestHeader,
       @RequestBody RegistrationRequestDto requestBody) {
+    mainValidator.validateRequest(requestBody, RegistrationRequestValidator.class, requestHeader);
     return ResponseEntity.ok(authenticationService.registration(requestBody));
   }
 
@@ -43,6 +50,7 @@ public class AuthenticationController implements AuthenticationControllerApi {
   public ResponseEntity<LoginResponseDto> login(
       @RequestHeader Map<String, String> requestHeader,
       @RequestBody LoginRequestDto requestBody) {
+    mainValidator.validateRequest(requestBody, LoginRequestValidator.class, requestHeader);
     return ResponseEntity.ok(authenticationService.login(requestBody));
   }
 
@@ -52,6 +60,7 @@ public class AuthenticationController implements AuthenticationControllerApi {
   public ResponseEntity<JwtResponseDto> authenticate(
       @RequestHeader Map<String, String> requestHeader,
       @RequestBody OtpRequestDto requestBody) {
+    mainValidator.validateRequest(requestBody, OtpRequestValidator.class, requestHeader);
     return ResponseEntity.ok(authenticationService.authenticate(requestBody));
   }
 
@@ -61,6 +70,7 @@ public class AuthenticationController implements AuthenticationControllerApi {
   public ResponseEntity<JwtResponseDto> refreshToken(
       @RequestHeader Map<String, String> requestHeader,
       @RequestBody RefreshTokenRequest requestBody) {
+    mainValidator.validateRequest(requestBody, RefreshTokenRequestValidator.class, requestHeader);
     return ResponseEntity.ok(authenticationService.refreshToken(requestBody));
   }
 }

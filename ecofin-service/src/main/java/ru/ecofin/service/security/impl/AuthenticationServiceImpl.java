@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +27,7 @@ import ru.ecofin.service.security.AuthenticationService;
 import ru.ecofin.service.security.JWTService;
 import ru.ecofin.service.service.OtpService;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -37,6 +39,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   @Override
   public UserResponseDto registration(RegistrationRequestDto requestDto) {
+    log.info("Registration process started");
+    if (userRepository.findUserByPhone(requestDto.getPhone()).isPresent()) {
+      log.warn("Phone already exists");
+      throw new ValidationException("This phone number is already busy", HttpStatus.BAD_REQUEST);
+    }
+
     User user = User.builder()
         .phone(requestDto.getPhone())
         .password(passwordEncoder.encode(requestDto.getPassword()))

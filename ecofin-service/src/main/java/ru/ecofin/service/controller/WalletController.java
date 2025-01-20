@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ecofin.service.annotation.LoggingUsed;
 import ru.ecofin.service.controller.api.WalletControllerApi;
+import ru.ecofin.service.controller.validator.MainRequestValidator;
+import ru.ecofin.service.controller.validator.MainValidator;
+import ru.ecofin.service.controller.validator.TransferRequestValidator;
+import ru.ecofin.service.controller.validator.UserWalletRequestValidator;
 import ru.ecofin.service.dto.request.MainRequestDto;
 import ru.ecofin.service.dto.request.TransferRequest;
 import ru.ecofin.service.dto.request.UserWalletRequestDto;
@@ -26,6 +30,7 @@ import ru.ecofin.service.service.WalletService;
 public class WalletController implements WalletControllerApi {
 
   private final WalletService walletService;
+  private final MainValidator mainValidator;
 
   @Override
   @SneakyThrows
@@ -33,6 +38,7 @@ public class WalletController implements WalletControllerApi {
   public ResponseEntity<FrontResponseDto> createWallet(
       @RequestHeader Map<String, String> requestHeader,
       @RequestBody MainRequestDto requestBody) {
+    mainValidator.validateRequest(requestBody, MainRequestValidator.class, requestHeader);
     return ResponseEntity.ok(FrontResponseDto.builder()
         .objectId(walletService.createWallet(requestBody.getUserId()))
         .status("Wallet successfully created")
@@ -45,6 +51,7 @@ public class WalletController implements WalletControllerApi {
   public ResponseEntity<WalletsResponseDto> getWallets(
       @RequestHeader Map<String, String> requestHeader,
       @RequestBody MainRequestDto requestBody) {
+    mainValidator.validateRequest(requestBody, MainRequestValidator.class, requestHeader);
     return ResponseEntity.ok(walletService.findWallet(requestBody.getUserId()));
   }
 
@@ -54,6 +61,7 @@ public class WalletController implements WalletControllerApi {
   public ResponseEntity<UserWalletResponseDto> getUserWallet(
       @RequestHeader Map<String, String> requestHeader,
       @RequestBody UserWalletRequestDto requestBody) {
+    mainValidator.validateRequest(requestBody, UserWalletRequestValidator.class, requestHeader);
     return ResponseEntity.ok(walletService.getUserWallet(requestBody));
   }
 
@@ -63,6 +71,7 @@ public class WalletController implements WalletControllerApi {
   public ResponseEntity<FrontResponseDto> transfer(
       @RequestHeader Map<String, String> requestHeader,
       @RequestBody TransferRequest requestBody) {
+    mainValidator.validateRequest(requestBody, TransferRequestValidator.class, requestHeader);
     return ResponseEntity.ok(walletService.transfer(requestBody));
   }
 }

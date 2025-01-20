@@ -19,6 +19,7 @@ import ru.ecofin.service.entity.Transaction;
 import ru.ecofin.service.entity.User;
 import ru.ecofin.service.entity.Wallet;
 import ru.ecofin.service.entity.enums.TransactionType;
+import ru.ecofin.service.exception.BadRequestException;
 import ru.ecofin.service.exception.NotFoundException;
 import ru.ecofin.service.mapper.TransactionMapper;
 import ru.ecofin.service.repository.CategoryRepository;
@@ -169,6 +170,12 @@ public class CategoryServiceImpl implements CategoryService {
     Wallet wallet = user.getWallets().stream().filter(wal -> wal.getId()
         .toString().equals(requestBody.getWalletId())).findFirst().orElseThrow(
         () -> new NotFoundException(requestBody.getWalletId(), "Wallet not found"));
+
+    if (requestBody.getTransactionType() == TransactionType.EXPENSE
+        && requestBody.getAmount().compareTo(wallet.getBalance()) > 0) {
+      throw new BadRequestException("That amount is not in this wallet");
+    }
+
     Category category = user.getCategories().stream().filter(cat -> cat.getId()
         .toString().equals(requestBody.getCategoryId())).findFirst().orElseThrow(
         () -> new NotFoundException(requestBody.getCategoryId(), "Category not found"));
@@ -177,8 +184,14 @@ public class CategoryServiceImpl implements CategoryService {
         .category(category)
         .wallet(wallet).build();
     transactionMapper.transactionDtoToTransaction(requestBody, transaction);
-    transactionRepository.save(transaction);
 
+    if (transaction.getTransactionType() == TransactionType.INCOME) {
+      wallet.setBalance(wallet.getBalance().add(transaction.getAmount()));
+    } else if (transaction.getTransactionType() == TransactionType.EXPENSE) {
+      wallet.setBalance(wallet.getBalance().subtract(transaction.getAmount()));
+    }
+
+    transactionRepository.save(transaction);
     return RestUtils.buildResponseDto(transaction.getId().toString(),
         "Transaction added successfully",
         "200");

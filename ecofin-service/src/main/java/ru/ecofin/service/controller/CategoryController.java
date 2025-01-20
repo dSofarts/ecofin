@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ecofin.service.annotation.LoggingUsed;
 import ru.ecofin.service.controller.api.CategoryControllerApi;
+import ru.ecofin.service.controller.validator.CreateCategoryRequestValidator;
+import ru.ecofin.service.controller.validator.CreateTransactionRequestValidator;
 import ru.ecofin.service.controller.validator.MainValidator;
+import ru.ecofin.service.controller.validator.UpdateCategoryRequestValidator;
 import ru.ecofin.service.dto.request.CreateCategoryRequestDto;
 import ru.ecofin.service.dto.request.CreateTransactionRequestDto;
 import ru.ecofin.service.dto.request.UpdateCategoryRequestDto;
@@ -37,7 +40,7 @@ public class CategoryController implements CategoryControllerApi {
   public ResponseEntity<FrontResponseDto> createCategory(
       @RequestHeader Map<String, String> requestHeader,
       @RequestBody CreateCategoryRequestDto requestBody) {
-    mainValidator.validateRequest(requestHeader);
+    mainValidator.validateRequest(requestBody, CreateCategoryRequestValidator.class, requestHeader);
     return ResponseEntity.ok(categoryService.createCategory(requestBody,
         jwtService.getPhoneFromHeader(requestHeader)));
   }
@@ -48,7 +51,7 @@ public class CategoryController implements CategoryControllerApi {
   public ResponseEntity<FrontResponseDto> updateCategory(
       @RequestHeader Map<String, String> requestHeader,
       @RequestBody UpdateCategoryRequestDto requestBody) {
-    mainValidator.validateRequest(requestHeader);
+    mainValidator.validateRequest(requestBody, UpdateCategoryRequestValidator.class, requestHeader);
     return ResponseEntity.ok(categoryService.updateCategory(requestBody,
         jwtService.getPhoneFromHeader(requestHeader)));
   }
@@ -90,7 +93,7 @@ public class CategoryController implements CategoryControllerApi {
   public ResponseEntity<FrontResponseDto> createTransaction(
       @RequestHeader Map<String, String> requestHeader,
       @RequestBody CreateTransactionRequestDto requestBody) {
-    mainValidator.validateRequest(requestHeader);
+    mainValidator.validateRequest(requestBody, CreateTransactionRequestValidator.class, requestHeader);
     return ResponseEntity.ok(categoryService.createTransaction(
         requestBody, jwtService.getPhoneFromHeader(requestHeader)));
   }
